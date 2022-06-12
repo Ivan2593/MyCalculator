@@ -35,7 +35,7 @@ namespace MyCalculator.ViewModel
         }
 
         /// <summary>
-        /// Команда говна
+        /// Тестовая команда
         /// </summary>
         public RelayCommand SomeAddCommand { get; }
 
