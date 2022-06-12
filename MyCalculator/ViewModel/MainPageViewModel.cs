@@ -40,11 +40,17 @@ namespace MyCalculator.ViewModel
         public RelayCommand SomeAddCommand { get; }
 
         /// <summary>
+        /// Команда очистки строки
+        /// </summary>
+        public RelayCommand ClearStringCommand { get; }
+
+        /// <summary>
         /// Инициализирует класс <see cref="MainPageViewModel"/>
         /// </summary>
         public MainPageViewModel()
         {
             SomeAddCommand = new RelayCommand(SomeAdd);
+            ClearStringCommand = new RelayCommand(ClearString);
         }
 
         /// <summary>
@@ -52,7 +58,15 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void SomeAdd()
         {
-            MainString = MainString + "a";
+            MainString = MainString + "5";
+        }
+
+        /// <summary>
+        /// Очистка строки
+        /// </summary>
+        private void ClearString()
+        {
+            MainString = "0";
         }
     }
 }

@@ -7,13 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     DataContext="{Binding mainPageViewModel, Source={StaticResource ServicesContainer}}"
-    Background="#E5E4E2">
+    Background="{StaticResource MainBackgroundColor}">
 
     <Grid Margin="4">
         
         <Grid.RowDefinitions>
             <RowDefinition Height="40px"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="1.6*"/>
             <RowDefinition Height="0.6*"/>
             <RowDefinition />
             <RowDefinition />
@@ -32,45 +33,64 @@
         
         <!--  Верхнее меню  -->
         <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Orientation="Horizontal">
-            <Button Background="#E5E4E2" Content="---" HorizontalAlignment="Left"/>
-            <TextBlock FontSize="20" FontWeight="Medium" VerticalAlignment="Center" Margin="5" >Обычный</TextBlock>
-            <Button Background="#E5E4E2" Content="Roll" HorizontalAlignment="Right"/>
-        </StackPanel>
-        
-        <!--  Строка вывода выражения  -->
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="4" HorizontalAlignment="Right" Style="{StaticResource MainTextStyle}" Text="{Binding MainString, Mode=OneWay}"/>
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="4" Orientation="Horizontal">
-            <Button Background="#E5E4E2" FontSize="12" FontWeight="Medium"  Margin="1"  Content="MC" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Button Background="#E5E4E2" FontSize="12" FontWeight="Medium"  Margin="1"  Content="MR" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Button Background="#E5E4E2" FontSize="12" FontWeight="Medium"  Margin="1"  Content="M+" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Button Background="#E5E4E2" FontSize="12" FontWeight="Medium"  Margin="1"  Content="M-" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Button Background="#E5E4E2" FontSize="12" FontWeight="Medium"  Margin="1"  Content="MS" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-            <Button Background="#E5E4E2" FontSize="12" FontWeight="Medium"  Margin="1"  Content="M*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <Button Content="---" Background="{StaticResource MainBackgroundColor}" HorizontalAlignment="Left"/>
+            <TextBlock Style="{StaticResource CalculatorNameStyle}" Text="Обычный"/>
+            <Button Content="Roll" Background="{StaticResource MainBackgroundColor}" HorizontalAlignment="Right"/>
         </StackPanel>
 
-        <Button x:Name="button1" Background="LightGray" Grid.Column="0" Grid.Row="3" Margin="1"  Content="%" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Command="{Binding SomeAddCommand}"/>
-        <Button x:Name="button2" Background="LightGray" Grid.Column="0" Grid.Row="4" Margin="1"  Content="1/x" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button3" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="0" Grid.Row="5" Margin="1"  Content="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button4" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="0" Grid.Row="6" Margin="1"  Content="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button5" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="0" Grid.Row="7" Margin="1"  Content="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button6" Background="White" FontSize="20" Grid.Column="0" Grid.Row="8" Margin="1"  Content="+/-" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button7" Background="LightGray" Grid.Column="1" Grid.Row="3" Margin="1"  Content="CE" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button8" Background="LightGray" Grid.Column="1" Grid.Row="4" Margin="1"  Content="x^2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button9" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="1" Grid.Row="5" Margin="1"  Content="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button10" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="1" Grid.Row="6" Margin="1"  Content="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button11" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="1" Grid.Row="7" Margin="1"  Content="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button12" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="1" Grid.Row="8" Margin="1"  Content="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button13" Background="LightGray" Grid.Column="2" Grid.Row="3" Margin="1"  Content="C" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button14" Background="LightGray" Grid.Column="2" Grid.Row="4" Margin="1"  Content="√x" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button15" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="2" Grid.Row="5" Margin="1"  Content="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button16" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="2" Grid.Row="6" Margin="1"  Content="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button17" Background="White" FontSize="20" FontWeight="Medium" Grid.Column="2" Grid.Row="7" Margin="1"  Content="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button18" Background="White" FontSize="20" Grid.Column="2" Grid.Row="8" Margin="1"  Content="," HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button19" Background="LightGray" FontSize="20" Grid.Column="3" Grid.Row="3" Margin="1"  Content="(-" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button20" Background="LightGray" FontSize="20" Grid.Column="3" Grid.Row="4" Margin="1"  Content="/" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button21" Background="LightGray" FontSize="20" Grid.Column="3" Grid.Row="5" Margin="1"  Content="*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button22" Background="LightGray" FontSize="20" Grid.Column="3" Grid.Row="6" Margin="1"  Content="-" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button23" Background="LightGray" FontSize="20" Grid.Column="3" Grid.Row="7" Margin="1"  Content="+" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button x:Name="button24" Background="LightSkyBlue" FontSize="20" Grid.Column="3" Grid.Row="8" Margin="1"  Content="=" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <!--  Строка предыдущего состояния  -->
+        <TextBlock Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource BackTextStyle}" Text="9+5+9="/>
+
+        <!--  Строка вывода выражения  -->
+        <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Style="{StaticResource MainTextStyle}" Text="{Binding MainString, Mode=OneWay}"/>
+        
+        <!-- Вспомогательные кнопки  -->
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Orientation="Horizontal">
+            <Button Content="MC" Style="{StaticResource AuxiliaryButtonsStyle}"/>
+            <Button Content="MR" Style="{StaticResource AuxiliaryButtonsStyle}"/>
+            <Button Content="M+" Style="{StaticResource AuxiliaryButtonsStyle}"/>
+            <Button Content="M-" Style="{StaticResource AuxiliaryButtonsStyle}"/>
+            <Button Content="MS" Style="{StaticResource AuxiliaryButtonsStyle}"/>
+            <Button Content="M*" Style="{StaticResource AuxiliaryButtonsStyle}"/>
+        </StackPanel>
+        
+        <!-- Кнопки калькулятора -->
+        <!-- 1 строка -->
+        <Button Content="%" Grid.Column="0" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="CE" Grid.Column="1" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="C" Grid.Column="2" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}" Command="{Binding ClearStringCommand}"/>
+        <Button Content="(-" Grid.Column="3" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}"/>
+
+        <!-- 2 строка -->
+        <Button Content="1/x" Grid.Column="0" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="x^2" Grid.Column="1" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="√x" Grid.Column="2" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="/" Grid.Column="3" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
+
+        <!-- 3 строка -->
+        <Button Content="7" Grid.Column="0" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="8" Grid.Column="1" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="9" Grid.Column="2" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="*" Grid.Column="3" Grid.Row="6" Style="{StaticResource OtherButtonsStyle}"/>
+
+        <!-- 4 строка -->
+        <Button Content="4" Grid.Column="0" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="5" Grid.Column="1" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}" Command="{Binding SomeAddCommand}"/>
+        <Button Content="6" Grid.Column="2" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="-" Grid.Column="3" Grid.Row="7" Style="{StaticResource OtherButtonsStyle}"/>
+
+        <!-- 5 строка -->
+        <Button Content="1" Grid.Column="0" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="2" Grid.Column="1" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="3" Grid.Column="2" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="+" Grid.Column="3" Grid.Row="8" Style="{StaticResource OtherButtonsStyle}"/>
+
+        <!-- 6 строка -->
+        <Button Content="+/-" Grid.Column="0" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="0" Grid.Column="1" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="," Grid.Column="2" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="=" Background="LightSkyBlue" FontSize="20" Grid.Column="3" Grid.Row="9" Style="{StaticResource ButtonsStyle}"/>
+        
+
     </Grid>
 </Page>
