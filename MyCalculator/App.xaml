@@ -1,0 +1,19 @@
+﻿<Application
+    x:Class="MyCalculator.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyCalculator"
+    xmlns:services="using:MyCalculator.Helpers">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resourses/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <services:ServicesContainer x:Key="ServicesContainer" />
+        </ResourceDictionary>
+
+        
+    </Application.Resources>
+
+</Application>
