@@ -7,12 +7,16 @@
     <!-- Стиль строки вывода выражения -->
     <Style TargetType="TextBlock" x:Key="MainTextStyle">
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="FontSize" Value="50"/>
     </Style>
-    
+
+    <!-- Стиль строки вывода выражения -->
+    <Style TargetType="Viewbox" x:Key="MainTextboxStyle">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+    </Style>
+
     <!-- Стиль строки предыдущего состояния -->
     <Style TargetType="TextBlock" x:Key="BackTextStyle">
         <Setter Property="Foreground" Value="Gray"/>

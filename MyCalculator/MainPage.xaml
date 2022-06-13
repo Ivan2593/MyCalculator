@@ -39,10 +39,15 @@
         </StackPanel>
 
         <!--  Строка предыдущего состояния  -->
-        <TextBlock Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource BackTextStyle}" Text="9+5+9="/>
+        <Viewbox  Grid.Row="1" Grid.ColumnSpan="4" Style="{StaticResource MainTextboxStyle}">
+            <TextBlock Style="{StaticResource BackTextStyle}" Text="{Binding BackString}"/>
+        </Viewbox>
 
         <!--  Строка вывода выражения  -->
-        <TextBlock Grid.Row="2" Grid.ColumnSpan="4" Style="{StaticResource MainTextStyle}" Text="{Binding MainString, Mode=OneWay}"/>
+        <Viewbox  Grid.Row="2" Grid.ColumnSpan="4" Style="{StaticResource MainTextboxStyle}">
+            <TextBlock Style="{StaticResource MainTextStyle}" Text="{Binding MainString, Mode=OneWay}"/>
+        </Viewbox>
+        
         
         <!-- Вспомогательные кнопки  -->
         <StackPanel Grid.Row="3" Grid.ColumnSpan="4" Orientation="Horizontal">
@@ -57,39 +62,39 @@
         <!-- Кнопки калькулятора -->
         <!-- 1 строка -->
         <Button Content="%" Grid.Column="0" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}"/>
-        <Button Content="CE" Grid.Column="1" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}"/>
-        <Button Content="C" Grid.Column="2" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}" Command="{Binding ClearStringCommand}"/>
-        <Button Content="(-" Grid.Column="3" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="CE" Grid.Column="1" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}" Command="{Binding ClearStringCommand}"/>
+        <Button Content="C" Grid.Column="2" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}" Command="{Binding ClearAllCommand}"/>
+        <Button Content="&lt;=" Grid.Column="3" Grid.Row="4" Style="{StaticResource OtherButtonsStyle}" Command="{Binding DeleteLastCommand}"/>
 
         <!-- 2 строка -->
         <Button Content="1/x" Grid.Column="0" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
-        <Button Content="x^2" Grid.Column="1" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="x&#x00B2;" Grid.Column="1" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
         <Button Content="√x" Grid.Column="2" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
-        <Button Content="/" Grid.Column="3" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="/" Grid.Column="3" Grid.Row="5" Style="{StaticResource OtherButtonsStyle}" Command="{Binding DivCommand}"/>
 
         <!-- 3 строка -->
-        <Button Content="7" Grid.Column="0" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="8" Grid.Column="1" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="9" Grid.Column="2" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="*" Grid.Column="3" Grid.Row="6" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="7" Grid.Column="0" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddSevenCommand}"/>
+        <Button Content="8" Grid.Column="1" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddEightCommand}"/>
+        <Button Content="9" Grid.Column="2" Grid.Row="6" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddNineCommand}"/>
+        <Button Content="*" Grid.Column="3" Grid.Row="6" Style="{StaticResource OtherButtonsStyle}" Command="{Binding MultCommand}"/>
 
         <!-- 4 строка -->
-        <Button Content="4" Grid.Column="0" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="5" Grid.Column="1" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}" Command="{Binding SomeAddCommand}"/>
-        <Button Content="6" Grid.Column="2" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="-" Grid.Column="3" Grid.Row="7" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="4" Grid.Column="0" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddFourCommand}"/>
+        <Button Content="5" Grid.Column="1" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddFiveCommand}"/>
+        <Button Content="6" Grid.Column="2" Grid.Row="7" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddSixCommand}"/>
+        <Button Content="-" Grid.Column="3" Grid.Row="7" Style="{StaticResource OtherButtonsStyle}" Command="{Binding SubCommand}"/>
 
         <!-- 5 строка -->
-        <Button Content="1" Grid.Column="0" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="2" Grid.Column="1" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="3" Grid.Column="2" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="+" Grid.Column="3" Grid.Row="8" Style="{StaticResource OtherButtonsStyle}"/>
+        <Button Content="1" Grid.Column="0" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddOneCommand}"/>
+        <Button Content="2" Grid.Column="1" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddTwoCommand}"/>
+        <Button Content="3" Grid.Column="2" Grid.Row="8" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddThreeCommand}"/>
+        <Button Content="+" Grid.Column="3" Grid.Row="8" Style="{StaticResource OtherButtonsStyle}" Command="{Binding SumCommand}"/>
 
         <!-- 6 строка -->
         <Button Content="+/-" Grid.Column="0" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="0" Grid.Column="1" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}"/>
+        <Button Content="0" Grid.Column="1" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}" Command="{Binding AddZeroCommand}"/>
         <Button Content="," Grid.Column="2" Grid.Row="9" Style="{StaticResource NumberButtonsStyle}"/>
-        <Button Content="=" Background="LightSkyBlue" FontSize="20" Grid.Column="3" Grid.Row="9" Style="{StaticResource ButtonsStyle}"/>
+        <Button Content="=" Background="LightSkyBlue" FontSize="20" Grid.Column="3" Grid.Row="9" Style="{StaticResource ButtonsStyle}" Command="{Binding EqualSignCommand}"/>
         
 
     </Grid>
