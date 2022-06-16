@@ -14,9 +14,21 @@ namespace MyCalculator.ViewModel
     public sealed class MainPageViewModel: ObservableObject
     {
         /// <summary>
-        /// Состояние кнопки (operations = операции, numbers = цифры, equal = равно,clear = обнуление)
+        /// Состояние кнопки (operations = операции, numbers = цифры, equal = равно, clear = обнуление, functions = функции)
         /// </summary>
-        private string _status = "numbers";
+        enum _status
+        {
+            operations,
+            numbers,
+            equal,
+            clear,
+            functions
+        }
+
+        /// <summary>
+        /// Текущее состояние калькулятора
+        /// </summary>
+        private _status _nowStatus = _status.numbers;
 
         /// <summary>
         /// Текущая операция
@@ -32,6 +44,16 @@ namespace MyCalculator.ViewModel
         /// Строка предыдущего состояния
         /// </summary>
         private string _backString = "";
+
+        /// <summary>
+        /// Левая часть выражения
+        /// </summary>
+        private string _leftString = "";
+
+        /// <summary>
+        /// Правая часть выражения
+        /// </summary>
+        private string _rightString = "";
 
         /// <summary>
         /// Первое число
@@ -92,35 +114,45 @@ namespace MyCalculator.ViewModel
 
         private void ZeroingString()
         {
-            if (_status == "operations")
+            if (_nowStatus != _status.numbers)
             {
-                MainString = "0";
-            }
-            if (_status == "clear")
-            {
-                ClearAll();
+                if (_nowStatus == _status.clear)
+                {
+                    ClearAll();
+                }
+                else
+                {
+                    ClearString();
+                }
             }
         }
 
         /// <summary>
         /// Изменение строки
         /// </summary>
-        private void AddZero() { ZeroingString(); MainString = WriteNumber("0"); _status = "numbers"; }
-        private void AddOne() { ZeroingString(); MainString = WriteNumber("1"); _status = "numbers"; }
-        private void AddTwo() { ZeroingString(); MainString = WriteNumber("2"); _status = "numbers"; }
-        private void AddThree() { ZeroingString(); MainString = WriteNumber("3"); _status = "numbers"; }
-        private void AddFour() { ZeroingString(); MainString = WriteNumber("4"); _status = "numbers"; }
-        private void AddFive() { ZeroingString(); MainString = WriteNumber("5"); _status = "numbers"; }
-        private void AddSix() { ZeroingString(); MainString = WriteNumber("6"); _status = "numbers"; }
-        private void AddSeven() { ZeroingString(); MainString = WriteNumber("7"); _status = "numbers"; }
-        private void AddEight() { ZeroingString(); MainString = WriteNumber("8"); _status = "numbers"; }
-        private void AddNine() { ZeroingString(); MainString = WriteNumber("9"); _status = "numbers"; }
+        private void AddZero() {
+            if (MainString == "0") return;
+            ZeroingString(); 
+            MainString = WriteNumber("0");
+        }
+        private void AddOne() { ZeroingString(); MainString = WriteNumber("1"); }
+        private void AddTwo() { ZeroingString(); MainString = WriteNumber("2"); }
+        private void AddThree() { ZeroingString(); MainString = WriteNumber("3"); }
+        private void AddFour() { ZeroingString(); MainString = WriteNumber("4"); }
+        private void AddFive() { ZeroingString(); MainString = WriteNumber("5"); }
+        private void AddSix() { ZeroingString(); MainString = WriteNumber("6"); }
+        private void AddSeven() { ZeroingString(); MainString = WriteNumber("7"); }
+        private void AddEight() { ZeroingString(); MainString = WriteNumber("8"); }
+        private void AddNine() { ZeroingString(); MainString = WriteNumber("9"); }
 
         /// <summary>
         /// Правило записи цифр
         /// </summary>
         public string WriteNumber(string number)
         {
+            _secondNumber = null;
+            _rightString = "";
+            _nowStatus = _status.numbers;
             if (MainString != "0")
             {
                 return MainString + number;
@@ -130,6 +162,30 @@ namespace MyCalculator.ViewModel
                 return number;
             }
         }
+
+        /// <summary>
+        /// Добавление точки
+        /// </summary>
+        private void AddDot()
+        {
+            if (_nowStatus == _status.equal)
+            {
+                ClearAll();
+            }
+            if (_nowStatus == _status.functions || _nowStatus == _status.operations)
+            {
+                ClearString();
+            }
+            if (MainString.IndexOf(',') == -1)
+            {
+                MainString = MainString + ",";
+            }
+        }
+
+        /// <summary>
+        /// Команда добавления точки
+        /// </summary>
+        public RelayCommand AddDotCommand { get; }
 
         /// <summary>
         /// Команда очистки всего
@@ -172,6 +228,31 @@ namespace MyCalculator.ViewModel
         public RelayCommand DeleteLastCommand { get; }
 
         /// <summary>
+        /// Команда удаления последнего
+        /// </summary>
+        public RelayCommand PercentCommand { get; }
+
+        /// <summary>
+        /// Команда удаления последнего
+        /// </summary>
+        public RelayCommand HyperboleCommand { get; }
+
+        /// <summary>
+        /// Команда удаления последнего
+        /// </summary>
+        public RelayCommand SquareCommand { get; }
+
+        /// <summary>
+        /// Команда удаления последнего
+        /// </summary>
+        public RelayCommand RootCommand { get; }
+
+        // <summary>
+        /// Команда смены знака
+        /// </summary>
+        public RelayCommand SignChangeCommand { get; }
+
+        /// <summary>
         /// Инициализирует класс <see cref="MainPageViewModel"/>
         /// </summary>
         public MainPageViewModel()
@@ -194,6 +275,12 @@ namespace MyCalculator.ViewModel
             DivCommand = new RelayCommand(Div);
             EqualSignCommand = new RelayCommand(EqualSing);
             DeleteLastCommand = new RelayCommand(DeleteLast);
+            PercentCommand = new RelayCommand(Percent);
+            HyperboleCommand = new RelayCommand(Hyperbole);
+            SquareCommand = new RelayCommand(Square);
+            RootCommand = new RelayCommand(Root);
+            AddDotCommand = new RelayCommand(AddDot);
+            SignChangeCommand = new RelayCommand(SignChange);
         }
 
         /// <summary>
@@ -201,35 +288,54 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void Sum()
         {
-            if (_status == "numbers")
+            if (_nowStatus == _status.numbers || _nowStatus == _status.functions)
             {
                 if (_firstNumber == null)
                 {
-                    _firstNumber = Convert.ToInt32(MainString);
-                }
-                else
-                {
-                    _secondNumber = Convert.ToInt32(MainString);
-                    string res = Calculation();
-                    if (res != "/0")
+                    _firstNumber = Convert.ToDouble(MainString);
+                    if (_secondNumber != null)
                     {
-                        MainString = res;
+                        _leftString = _rightString;
                     }
                     else
                     {
-                        BackString = BackString + " " + MainString + " +";
+                        _leftString = _firstNumber.ToString();
+                        if (MainString[MainString.Length-1] == ',')
+                        {
+                            DeleteLast();
+                        }
+                    }
+                }
+                else
+                {
+                    _secondNumber = Convert.ToDouble(MainString);
+                    string res = BasicCalculation();
+                    if (res != "/0")
+                    {
+                        MainString = res;
+                        _leftString = MainString;
+                    }
+                    else
+                    {
+                        BackString = BackString + " " + _rightString + " +";
                         MainString = "Деление на ноль невозможно";
-                        _status = "clear";
+                        _nowStatus = _status.clear;
                     }
                 }
             }
-            if (_status != "clear")
+            if (_nowStatus != _status.clear)
             {
                 _secondNumber = null;
                 _operation = "+";
-                BackString = MainString + " " + _operation;
-                _status = "operations";
+                if (_nowStatus == _status.equal)
+                {
+                    _leftString = MainString;
+                    _firstNumber = Convert.ToDouble(MainString);
+                }
+                BackString = _leftString + " " + _operation + " ";
+                _nowStatus = _status.operations;
             }
+            _rightString = "";
         }
 
         /// <summary>
@@ -237,35 +343,54 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void Sub()
         {
-            if (_status == "numbers")
+            if (_nowStatus == _status.numbers || _nowStatus == _status.functions)
             {
                 if (_firstNumber == null)
                 {
-                    _firstNumber = Convert.ToInt32(MainString);
-                }
-                else
-                {
-                    _secondNumber = Convert.ToInt32(MainString);
-                    string res = Calculation();
-                    if (res != "/0")
+                    _firstNumber = Convert.ToDouble(MainString);
+                    if (_secondNumber != null)
                     {
-                        MainString = res;
+                        _leftString = _rightString;
                     }
                     else
                     {
-                        BackString = BackString + " " + MainString + " -";
+                        _leftString = _firstNumber.ToString();
+                        if (MainString[MainString.Length - 1] == ',')
+                        {
+                            DeleteLast();
+                        }
+                    }
+                }
+                else
+                {
+                    _secondNumber = Convert.ToDouble(MainString);
+                    string res = BasicCalculation();
+                    if (res != "/0")
+                    {
+                        MainString = res;
+                        _leftString = MainString;
+                    }
+                    else
+                    {
+                        BackString = BackString + " " + _rightString + " -";
                         MainString = "Деление на ноль невозможно";
-                        _status = "clear";
+                        _nowStatus = _status.clear;
                     }
                 }
             }
-            if (_status != "clear")
+            if (_nowStatus != _status.clear)
             {
                 _secondNumber = null;
                 _operation = "-";
-                BackString = MainString + " " + _operation;
-                _status = "operations";
+                if (_nowStatus == _status.equal)
+                {
+                    _leftString = MainString;
+                    _firstNumber = Convert.ToDouble(MainString);
+                }
+                BackString = _leftString + " " + _operation + " ";
+                _nowStatus = _status.operations;
             }
+            _rightString = "";
         }
 
         /// <summary>
@@ -273,36 +398,54 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void Mult()
         {
-            if (_status == "numbers")
+            if (_nowStatus == _status.numbers || _nowStatus == _status.functions)
             {
                 if (_firstNumber == null)
                 {
-                    _firstNumber = Convert.ToInt32(MainString);
-
-                }
-                else
-                {
-                    _secondNumber = Convert.ToInt32(MainString);
-                    string res = Calculation();
-                    if (res != "/0")
+                    _firstNumber = Convert.ToDouble(MainString);
+                    if (_secondNumber != null)
                     {
-                        MainString = res;
+                        _leftString = _rightString;
                     }
                     else
                     {
-                        BackString = BackString + " " + MainString + " *";
+                        _leftString = _firstNumber.ToString();
+                        if (MainString[MainString.Length - 1] == ',')
+                        {
+                            DeleteLast();
+                        }
+                    }
+                }
+                else
+                {
+                    _secondNumber = Convert.ToDouble(MainString);
+                    string res = BasicCalculation();
+                    if (res != "/0")
+                    {
+                        MainString = res;
+                        _leftString = MainString;
+                    }
+                    else
+                    {
+                        BackString = BackString + " " + _rightString + " *";
                         MainString = "Деление на ноль невозможно";
-                        _status = "clear";
+                        _nowStatus = _status.clear;
                     }
                 }
             }
-            if (_status != "clear")
+            if (_nowStatus != _status.clear)
             {
                 _secondNumber = null;
                 _operation = "*";
-                BackString = MainString + " " + _operation;
-                _status = "operations";
+                if (_nowStatus == _status.equal)
+                {
+                    _leftString = MainString;
+                    _firstNumber = Convert.ToDouble(MainString);
+                }
+                BackString = _leftString + " " + _operation + " ";
+                _nowStatus = _status.operations;
             }
+            _rightString = "";
         }
 
         /// <summary>
@@ -310,43 +453,60 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void Div()
         {
-
-            if (_status == "numbers")
+            if (_nowStatus == _status.numbers || _nowStatus == _status.functions)
             {
                 if (_firstNumber == null)
                 {
-                    _firstNumber = Convert.ToInt32(MainString);
-
-                }
-                else
-                {
-                    _secondNumber = Convert.ToInt32(MainString);
-                    string res = Calculation();
-                    if (res != "/0")
+                    _firstNumber = Convert.ToDouble(MainString);
+                    if (_secondNumber != null)
                     {
-                        MainString = res;
+                        _leftString = _rightString;
                     }
                     else
                     {
-                        BackString = BackString + " " + MainString + " /";
+                        _leftString = _firstNumber.ToString();
+                        if (MainString[MainString.Length - 1] == ',')
+                        {
+                            DeleteLast();
+                        }
+                    }
+                }
+                else
+                {
+                    _secondNumber = Convert.ToDouble(MainString);
+                    string res = BasicCalculation();
+                    if (res != "/0")
+                    {
+                        MainString = res;
+                        _leftString = MainString;
+                    }
+                    else
+                    {
+                        BackString = BackString + " " + _rightString + " /";
                         MainString = "Деление на ноль невозможно";
-                        _status = "clear";
+                        _nowStatus = _status.clear;
                     }
                 }
             }
-            if (_status != "clear")
+            if (_nowStatus != _status.clear)
             {
                 _secondNumber = null;
                 _operation = "/";
-                BackString = MainString + " " + _operation;
-                _status = "operations";
+                if (_nowStatus == _status.equal)
+                {
+                    _leftString = MainString;
+                    _firstNumber = Convert.ToDouble(MainString);
+                }
+                BackString = _leftString + " " + _operation + " ";
+                _nowStatus = _status.operations;
             }
+            _rightString = "";
         }
 
         /// <summary>
         /// Вычисление
         /// </summary>
-        private string Calculation()
+        private string BasicCalculation()
         {
             string res = "";
             if (_operation == "+")
@@ -384,21 +544,52 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void EqualSing()
         {
-            if (_status != "clear")
+            if (_nowStatus != _status.clear)
             {
                 if (_firstNumber == null)
                 {
-                    _firstNumber = Convert.ToInt32(MainString);
-                    BackString = _firstNumber.ToString() + " =";
+                    _firstNumber = Convert.ToDouble(MainString);
+                    if (_secondNumber != null)
+                    {
+                        _leftString = _rightString;
+                        _secondNumber = null;
+                        _rightString = "";
+                    }
+                    else
+                    {
+                        _leftString = _firstNumber.ToString();
+                        _firstNumber = null;
+                    }
+                    BackString = _leftString + " =";
                 }
                 else
                 {
                     if (_secondNumber == null)
                     {
-                        _secondNumber = Convert.ToInt32(MainString);
+                        if (_nowStatus == _status.equal)
+                        {
+                            return;
+                        }
+                        _secondNumber = Convert.ToDouble(MainString);
+                        if (MainString[MainString.Length - 1] == ',')
+                        {
+                            DeleteLast();
+                        }
+                        _rightString = MainString;
                     }
-                    BackString = _firstNumber.ToString();
-                    string res = Calculation();
+                    else
+                    {
+                        if (_nowStatus == _status.functions)
+                        {
+                            _secondNumber = Convert.ToDouble(MainString);
+                        }
+                        else
+                        {
+                            _leftString = _firstNumber.ToString();
+                            _rightString = _secondNumber.ToString();
+                        }
+                    }
+                    string res = BasicCalculation();
                     if (res != "/0")
                     {
                         MainString = res;
@@ -406,12 +597,12 @@ namespace MyCalculator.ViewModel
                     else
                     {
                         MainString = "Деление на ноль невозможно";
-                        _status = "clear";
+                        _nowStatus = _status.clear;
                         return;
                     }
-                    BackString = BackString + " " + _operation + " " + _secondNumber.ToString() + " =";
+                    BackString = _leftString + " " + _operation + " " + _rightString + " =";
                 }
-                _status = "equal";
+                _nowStatus = _status.equal;
             }
             else
             {
@@ -424,17 +615,175 @@ namespace MyCalculator.ViewModel
         /// </summary>
         private void DeleteLast()
         {
-            if (_status == "equal")
+            if (_nowStatus == _status.clear)
+            {
+                ClearAll();
+                return;
+            }
+            if (_nowStatus == _status.equal)
             {
                 BackString = "";
                 return;
             }
-            if (_status == "numbers")
+            if (_nowStatus == _status.numbers)
             {
                 MainString = MainString.Substring(0, MainString.Length - 1);
                 if (MainString == "")
                 {
                     MainString = "0";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Вычисление процента
+        /// </summary>
+        private void Percent()
+        {
+            if (_nowStatus != _status.clear)
+            {
+                if (_firstNumber == null)
+                {
+                    BackString = "0";
+                    MainString = "0";
+                    _secondNumber = null;
+                    _rightString = "";
+                    _nowStatus = _status.numbers;
+                    return;
+                }
+                
+                _secondNumber = Convert.ToDouble(MainString);
+                MainString = (_firstNumber * Convert.ToDouble(MainString) / 100).ToString();
+                if (_nowStatus == _status.equal)
+                {
+                    _rightString = "";
+                    _leftString = "";
+                    _operation = "";
+                    BackString = MainString;
+                    _nowStatus = _status.equal;
+                    return;
+                }
+                _rightString = MainString;
+                BackString = _leftString + " " + _operation + " " + _rightString;
+                _nowStatus = _status.functions;
+            }
+
+        }
+
+        /// <summary>
+        /// Вычисление гиперболы
+        /// </summary>
+        private void Hyperbole()
+        {
+            if (_nowStatus != _status.clear)
+            {
+                if (_nowStatus == _status.equal)
+                {
+                    _firstNumber = null;
+                    _rightString = "";
+                    _leftString = "";
+                    _operation = "";
+                }
+                _secondNumber = Convert.ToDouble(MainString);
+                if (_rightString == "")
+                {
+                    _rightString = "1/(" + _secondNumber.ToString() + ")";
+                }
+                else
+                {
+                    _rightString = "1/(" + _rightString + ")";
+                }
+
+                MainString = (1 / Convert.ToDouble(MainString)).ToString();
+                if (_secondNumber == 0)
+                {
+                    BackString = BackString + " " + _rightString;
+                    MainString = "Деление на ноль невозможно";
+                    _nowStatus = _status.clear;
+                }
+                else
+                {
+                    BackString = _leftString + " " + _operation + " " + _rightString;
+                    _nowStatus = _status.functions;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Вычисление квадрата
+        /// </summary>
+        private void Square()
+        {
+            if (_nowStatus != _status.clear)
+            {
+                if (_nowStatus == _status.equal)
+                {
+                    _firstNumber = null;
+                    _rightString = "";
+                    _leftString = "";
+                    _operation = "";
+                }
+                _secondNumber = Convert.ToDouble(MainString);
+                if (_rightString == "")
+                {
+                    _rightString = "sqr(" + _secondNumber.ToString() + ")";
+                }
+                else
+                {
+                    _rightString = "sqr(" + _rightString + ")";
+                }
+                
+                MainString = (Convert.ToDouble(MainString) * Convert.ToDouble(MainString)).ToString();
+                BackString = _leftString + " " + _operation + " " + _rightString;
+                _nowStatus = _status.functions;
+            }
+        }
+
+        /// <summary>
+        /// Вычисление корня
+        /// </summary>
+        private void Root()
+        {
+            if (_nowStatus != _status.clear)
+            {
+                if (_nowStatus == _status.equal)
+                {
+                    _firstNumber = null;
+                    _rightString = "";
+                    _leftString = "";
+                    _operation = "";
+                }
+                _secondNumber = Convert.ToDouble(MainString);
+                if (_rightString == "")
+                {
+                    _rightString = "√(" + _secondNumber.ToString() + ")";
+                }
+                else
+                {
+                    _rightString = "√(" + _rightString + ")";
+                }
+
+                MainString = (Math.Sqrt(Convert.ToDouble(MainString))).ToString();
+                BackString = _leftString + " " + _operation + " " + _rightString;
+                _nowStatus = _status.functions;
+            }
+        }
+
+
+        /// <summary>
+        /// Смена знака
+        /// </summary>
+        private void SignChange()
+        {
+            if (MainString != "0")
+            {
+                if (MainString[0] == '-')
+                {
+                    MainString = MainString.Remove(0, 1);
+                }
+                else
+                {
+                    MainString = MainString.Insert(0, "-");
                 }
             }
         }
@@ -448,8 +797,10 @@ namespace MyCalculator.ViewModel
             BackString = "";
             _firstNumber = null;
             _secondNumber = null;
+            _leftString = "";
+            _rightString = "";
             _operation = "";
-            _status = "numbers";
+            _nowStatus = _status.numbers;
         }
 
         /// <summary>
@@ -458,9 +809,32 @@ namespace MyCalculator.ViewModel
         private void ClearString()
         {
             MainString = "0";
-            if (_status == "clear")
+            if (_nowStatus == _status.clear)
             {
                 ClearAll();
+            }
+            if (_nowStatus == _status.equal && _secondNumber != null)
+            {
+                ClearAll();
+            }
+            if (_nowStatus == _status.functions)
+            {
+                if (_firstNumber == null)
+                {
+                    BackString = _leftString + " " + _operation + " " + _rightString;
+                    _operation = "";
+                }
+                else
+                {
+                    BackString = _leftString + " " + _operation + " ";
+                }
+                _secondNumber = null;
+                _rightString = "";
+                _nowStatus = _status.numbers;
+            }
+            if (_nowStatus == _status.operations)
+            {
+                _nowStatus = _status.numbers;
             }
         }
     }

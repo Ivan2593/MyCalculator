@@ -12,7 +12,7 @@
     </Style>
 
     <!-- Стиль строки вывода выражения -->
-    <Style TargetType="Viewbox" x:Key="MainTextboxStyle">
+    <Style TargetType="Viewbox" x:Key="TextboxStyle">
         <Setter Property="HorizontalAlignment" Value="Right"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
     </Style>
